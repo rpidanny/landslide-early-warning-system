@@ -4,7 +4,8 @@
     <base href="/">
 	<title>User Authentication</title>
 
-	<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="/assets/css/custom.css"/>
 
 	<script src="/assets/js/angular.min.js"></script>
 	<script src="/assets/js/angular-resource.min.js"></script>
@@ -15,6 +16,7 @@
 </head>
 <body ng-app="mainModule">
 	<div class="container">  
+            <div ng-include="'/views/header.html'"></div>
 		<ui-view></ui-view>
 	</div>
 </body>
