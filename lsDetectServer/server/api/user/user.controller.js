@@ -12,17 +12,23 @@ exports.index = function(req, res) {
 
 exports.register = function(req, res) {
 	var userObject = {
-		name: req.body.name,
-		email: req.body.email,
-        password: crypto.createHmac('sha256', secret).update(req.body.password).digest('hex'),
-		phone: req.body.phone,
-		location: req.body.location,
+		name: req.body.user.name,
+		email: req.body.user.email,
+        password: crypto.createHmac('sha256', secret).update(req.body.user.password).digest('hex'),
+		phone: req.body.user.phone,
+		location: req.body.user.location,
         created_date: Date.now()
 	}
 	User.create(userObject, function(err, user) {
         if (err) {
+            res.status(400);
             console.log(err);
-            res.send(400);
+            if(err.code == 11000){
+                return res.send({
+                    success: false,
+                    message: 'Email already in use. Please use different email.'
+                });
+            }
             return res.send({
             	success: false,
             	message: 'Error registering user.'
@@ -38,32 +44,41 @@ exports.register = function(req, res) {
 };
 
 exports.login = function(req, res) {
-    console.log()
     var password = crypto.createHmac('sha256', secret).update(req.body.password).digest('hex');
     User.find({email:req.body.email}).sort({_id:-1}).limit(1).exec(function(err, result){
-        console.log(err);
-        console.log(result[0].name);
+        if(err){
+            console.log(err);
+            res.status(400);
+            return res.send({
+                success: false,
+                message: 'Email/Password Error'
+            });
+        }
         if (result.length != 0) {
             if(password === result[0].password){
                 req.session.name = result[0].name;
                 req.session.email = result[0].email;
                 req.session.location = result[0].location;
                 req.session.phone = result[0].phone;
-                res.send(result);
+                return res.send({
+                    success: true,
+                    message: 'Login successful.',
+                    user_data: result[0]
+                });
             }
             else {
-                res.send(400);
+                res.status(400);
                 return res.send({
                     success: false,
-                    message: 'Authetication Error'
+                    message: 'Email/Password Error'
                 });
             }
         }
         else{
-            res.send(400);
+            res.status(400);
             return res.send({
                 success: false,
-                message: 'Authetication Error'
+                message: 'Email/Password Error'
             });
         }
     });

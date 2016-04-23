@@ -26,7 +26,19 @@ app.config([
 		$urlRouterProvider.otherwise("/");
 }]);
 
-app.controller('loginController', ['$scope', function($scope){
+app.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location){
+	$scope.login = function(user) {
+		$http.post('/user/login',user).success(function(response){
+			localStorage.name = response.user_data.name;
+			localStorage.email = response.user_data.email;
+			localStorage.location = response.user_data.location;
+			localStorage.phone = response.user_data.phone;
+			alert(response.message);
+			$location.path('/dashboard');
+		}).error(function(err){
+			alert(err.message);
+		});
+	}
 }]);
 
 app.controller('signupController', ['$scope', '$http', function($scope, $http){
@@ -34,8 +46,10 @@ app.controller('signupController', ['$scope', '$http', function($scope, $http){
 		$http.post('/user',{user:user}).success(function(response){
 			alert('user registered successfully');
 		}).error(function(err){
-                    $scope.error = err;
-                });
+			console.log(err);
+            $scope.error = err;
+            alert(err.message);
+        });
 	}
 }]);
 app.controller('dashboardController', function($scope){
