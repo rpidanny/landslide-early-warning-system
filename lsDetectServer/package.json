@@ -1,0 +1,20 @@
+{
+    "name": "spaceapps",
+    "version": "1.0.0",
+    "description": "",
+    "main": "app.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Zoom",
+    "license": "ISC",
+    "dependencies": {
+        "body-parser": "^1.14.1",
+        "ejs": "^2.3.4",
+        "express": "^4.13.3",
+        "html": "0.0.10",
+        "mongoose": "^4.1.9",
+        "morgan": "^1.6.1",
+        "stylus": "^0.52.4"
+    }
+}
