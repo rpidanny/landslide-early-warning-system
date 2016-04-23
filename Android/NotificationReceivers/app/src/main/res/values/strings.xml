@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WarningReceiver</string>
+    <string name="app_name">Landslide Alert</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
