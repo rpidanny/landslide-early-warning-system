@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -34,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private String SERVER_URL = "http://192.168.1.35:3000/sensor";
     private String TAG = "MainActivity";
     private Boolean sensorFlag = false;
+    private SeekBar sb;
+
+    private float[] mValuesAccel       = new float[3];
+    private float[] mValuesOrientation = new float[3];
+    private int humidity;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +47,24 @@ public class MainActivity extends AppCompatActivity {
 
         sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
-        final float[] mValuesAccel       = new float[3];
-        final float[] mValuesOrientation = new float[3];
-        final float[] mRotationMatrix    = new float[9];
+        sb = (SeekBar) findViewById(R.id.seekBar);
+        sb.setProgress(30);
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                humidity = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         btnStart = (Button) findViewById(R.id.btnStart);
         btnStart.setOnClickListener(new View.OnClickListener() {
@@ -73,12 +94,11 @@ public class MainActivity extends AppCompatActivity {
                     case Sensor.TYPE_ACCELEROMETER:
                         System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
 
-                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location);
-                        //POST("192.168.1.35:3000/sensor",s);
+                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location,humidity);
                         PostTask myTask = new PostTask();
 
                         myTask.execute(s);
-                        //System.out.println(mValuesAccel[0]);
+                        System.out.println(humidity);
                         break;
                     case Sensor.TYPE_ORIENTATION:
                         System.arraycopy(event.values, 0, mValuesOrientation, 0, 3);
@@ -134,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 jsonObject.accumulate("pan", sensor[0].getPan());
                 jsonObject.accumulate("yaw", sensor[0].getYaw());
                 jsonObject.accumulate("location", sensor[0].getLocation());
+                jsonObject.accumulate("humidity", sensor[0].getHumidity());
 
                 json = jsonObject.toString();
                 final String tempdata = json;

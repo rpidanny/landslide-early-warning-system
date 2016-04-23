@@ -6,8 +6,9 @@ package io.github.rpidanny.sensornode;
 public class LandSlideSensor {
     private double x,y,z,tilt,pan,yaw;
     private String location;
+    private int humidity;
 
-    LandSlideSensor(double x, double y, double z,double tilt,double pan, double yaw,String location){
+    LandSlideSensor(double x, double y, double z,double tilt,double pan, double yaw,String location,int humidity){
         this.x=x;
         this.y=y;
         this.z=z;
@@ -15,6 +16,7 @@ public class LandSlideSensor {
         this.pan=pan;
         this.yaw=yaw;
         this.location = location;
+        this.humidity = humidity;
     }
 
     public double getX(){
@@ -38,5 +40,8 @@ public class LandSlideSensor {
     }
     public String getLocation(){
         return this.location;
+    }
+    public int getHumidity(){
+        return this.humidity;
     }
 }

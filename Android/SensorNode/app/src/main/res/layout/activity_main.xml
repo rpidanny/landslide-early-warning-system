@@ -24,4 +24,13 @@
         android:id="@+id/btnStart"
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:layout_below="@+id/btnStart"
+        android:max="100"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false" />
 </RelativeLayout>
