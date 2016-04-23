@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     SensorManager sensorManager;
     SensorEventListener mEventListener;
     private Button btnStart;
+    private TextView txt1;
     private String location = "Thapathali";
     private String SERVER_URL = "http://192.168.1.35:3000/sensor";
     private String TAG = "MainActivity";
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final TextView txt1 = (TextView) findViewById(R.id.textView1);
+        txt1 = (TextView) findViewById(R.id.textView1);
 
         mEventListener = new SensorEventListener() {
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -71,9 +72,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (event.sensor.getType()) {
                     case Sensor.TYPE_ACCELEROMETER:
                         System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
-                        final CharSequence test;
-                        test = "results: " + mValuesAccel[0] +" "+mValuesAccel[1]+ " "+ mValuesAccel[2];
-                        txt1.setText(test);
+
                         LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location);
                         //POST("192.168.1.35:3000/sensor",s);
                         PostTask myTask = new PostTask();
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+        //SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
 
     }
 
@@ -137,6 +136,13 @@ public class MainActivity extends AppCompatActivity {
                 jsonObject.accumulate("location", sensor[0].getLocation());
 
                 json = jsonObject.toString();
+                final String tempdata = json;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        txt1.setText(tempdata);
+                    }
+                });
                 System.out.println(json);
             }catch (Exception e){
                 e.printStackTrace();
