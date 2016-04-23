@@ -1,0 +1,12 @@
+/* 
+    Created on : Apr 23, 2016, 4:36:13 PM
+    Author     : Subigya
+*/
+.navbar-default{
+    background-color: #D9EDF7;
+}
+.navbar-default .navbar-nav>.active>a, 
+.navbar-default .navbar-nav>.active>a:focus, 
+.navbar-default .navbar-nav>.active>a:hover{
+    background-color: #5BC0DE;
+}
