@@ -33,7 +33,7 @@ public class NotificationHelper {
                 .setContentTitle(bundle.getString("title"))
                 .setContentText(bundle.getString("message"))
                 .setTicker(bundle.getString("ticker"))
-                //.setSmallIcon(R.drawable.icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentIntent(pendingIntent)
                 .setCategory(NotificationCompat.CATEGORY_CALL)
                 .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
