@@ -12,6 +12,9 @@ var userSchema = mongoose.Schema({
     },
     location: {
         type: String
+    },
+    created_date:{
+        type: Number
     }
 });
 module.exports = mongoose.model('User', userSchema);
