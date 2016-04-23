@@ -17,7 +17,6 @@ import java.io.IOException;
 public class GCMRegistrationService extends IntentService {
 
     private static final String TAG = "PushNotification";
-    private static final String[] TOPICS = {"global"};
 
     public GCMRegistrationService(){
         super(TAG);
@@ -53,7 +52,7 @@ public class GCMRegistrationService extends IntentService {
     //subscribe to topics for group messaging
     private void subscribeTopics(String token) throws IOException {
         GcmPubSub pubSub = GcmPubSub.getInstance(this);
-        for (String topic : TOPICS) {
+        for (String topic : GCMPreferences.TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
             System.out.println("Subscribed to : "+topic);
         }
