@@ -9,14 +9,11 @@ exports.index = function(req, res) {
 };
 
 exports.store = function(req, res) {
-    var sensorObject = {
-        tilt_angle: req.body.tilt_angle,
-        x_acceleration: req.body.x_acceleration,
-        y_acceleration: req.body.y_acceleration,
-        z_acceleration: req.body.z_acceleration,
-        created_date: Date.now()
-    }
-    Sensor.create(sensorObject, function(err, sensor) {
+    console.log(req.body);
+    req.body.created_date = Date.now();
+    Sensor.create(req.body, function(err, sensor) {
+        console.log(err);
+        console.log(sensor);
         if (err) {
             console.log(err);
             res.status(400);
