@@ -13,11 +13,13 @@ exports.register = function(req, res) {
 		name: req.body.name,
 		email: req.body.email,
 		phone: req.body.phone,
-		location: req.body.location
+		location: req.body.location,
+        created_date: Date.now()
 	}
 	User.create(userObject, function(err, user) {
         if (err) {
             console.log(err);
+            res.send(400);
             return res.send({
             	success: false,
             	message: 'Error registering user.'
@@ -25,7 +27,7 @@ exports.register = function(req, res) {
         } else {
             return res.send({
             	success: true,
-            	message: 'User registered successfully',
+            	message: 'User registered successfully.',
             	user_data: user
             });
         }
