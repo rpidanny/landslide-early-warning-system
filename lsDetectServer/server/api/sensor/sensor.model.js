@@ -1,7 +1,13 @@
 var mongoose = require('mongoose');
 
 var sensorSchema = mongoose.Schema({
-    tilt_angle: {
+    tilt: {
+        type: String
+    },
+    pan: {
+        type: String
+    },
+    yaw: {
         type: String
     },
     x_acceleration: {
@@ -11,6 +17,9 @@ var sensorSchema = mongoose.Schema({
         type: String
     },
     z_acceleration: {
+        type: String
+    },
+    location:{
         type: String
     },
     created_date:{
