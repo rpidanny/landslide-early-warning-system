@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">Landslide Alert</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password </string>
+    <string name="action_sign_in">Log In</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="title_activity_signup">Sign in</string>
+    <string name="prompt_location">Location</string>
+    <string name="prompt_phone">Phone Number</string>
+    <string name="action_sign_up">Register</string>
+    <string name="action_phone_short">Phone</string>
+    <string name="signup_fullname">Fullname</string>
+    <string name="signup_fullname_hint">Fullname</string>
+    <string name="action_go_to_login">Login if you already have account</string>
+    <string name="action_go_to_signup">Register if you don\'t have an account</string>
+    <string name="title_activity_login">Login</string>
+</resources>
