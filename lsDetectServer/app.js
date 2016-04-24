@@ -13,7 +13,8 @@ require('./server/config/mongoose')(config);
 require('./routes')(app);
 
 app.set('port', process.env.PORT || 3000);
-var ip = "localhost";
+var ip ='192.168.1.35'
+// var ip = "localhost";
 var server = http.createServer(app)
 server.listen(config.port, ip);
 
