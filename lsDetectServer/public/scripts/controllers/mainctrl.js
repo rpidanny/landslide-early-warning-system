@@ -1,57 +1,73 @@
 var app = angular.module('mainModule', [
-	'ui.bootstrap', 
-	'ngResource', 
-	'ui.router', 
-	]);
+    'ui.bootstrap',
+    'ngResource',
+    'ui.router',
+    'uiGmapgoogle-maps'
+]);
 
 app.config([
-	'$stateProvider',
-	'$urlRouterProvider',
-	function($stateProvider, $urlRouterProvider) {
-		$stateProvider
-			.state('login',{
-				url: '/',
-				templateUrl: '/views/login.html',
-				controller: 'loginController'
-			})
-			.state('signup',{
-				url: '/signup',
-				templateUrl: '/views/signup.html',
-				controller: 'signupController'
-			}).state('dashboard',{
-                            url: '/dashboard',
-                            templateUrl: '/views/dashboard.html',
-                            controller: 'dashboardController'
-                        });
-		$urlRouterProvider.otherwise("/");
-}]);
+    '$stateProvider',
+    '$urlRouterProvider',
+    function($stateProvider, $urlRouterProvider) {
+        $stateProvider
+            .state('login', {
+                url: '/',
+                templateUrl: '/views/login.html',
+                controller: 'loginController'
+            })
+            .state('signup', {
+                url: '/signup',
+                templateUrl: '/views/signup.html',
+                controller: 'signupController'
+            }).state('dashboard', {
+                url: '/dashboard',
+                templateUrl: '/views/dashboard.html',
+                controller: 'dashboardController'
+            });
+        $urlRouterProvider.otherwise("/");
+    }
+]);
 
-app.controller('loginController', ['$scope', '$http', '$location', function($scope, $http, $location){
-	$scope.login = function(user) {
-		$http.post('/user/login',user).success(function(response){
-			localStorage.name = response.user_data.name;
-			localStorage.email = response.user_data.email;
-			localStorage.location = response.user_data.location;
-			localStorage.phone = response.user_data.phone;
-			alert(response.message);
-			$location.path('/dashboard');
-		}).error(function(err){
-			alert(err.message);
-		});
-	}
-}]);
+app.controller('loginController', ['$scope',
+    function($scope) {}
+]);
 
-app.controller('signupController', ['$scope', '$http', function($scope, $http){
-	$scope.submitUser = function(user){
-		$http.post('/user',{user:user}).success(function(response){
-			alert('user registered successfully');
-		}).error(function(err){
-			console.log(err);
-            $scope.error = err;
-            alert(err.message);
-        });
-	}
-}]);
-app.controller('dashboardController', function($scope){
-    
+app.controller('signupController', ['$scope', '$http',
+    function($scope, $http) {
+        $scope.submitUser = function(user) {
+            $http.post('/user', {
+                user: user
+            }).success(function(response) {
+                alert('user registered successfully');
+            }).error(function(err) {
+                $scope.error = err;
+            });
+        }
+    }
+]);
+app.controller('dashboardController', function($scope) {
+    $scope.map = {
+        center: {
+            latitude: 28.3949,
+            longitude: 84.1240
+        },
+        zoom: 7,
+        bounds: {}
+    };
+    $scope.options = {
+        scrollwheel: false
+    };
+    $scope.marker = [{
+        latitude: 27.7172,
+        longitude: 85.3240,
+        title: "m0",
+        id: 0,
+        options:{labelClass:'marker_labels',labelAnchor:'12 60',labelContent:'title'},
+    }, {
+        latitude: 27.6644,
+        longitude: 85.3188,
+        title: "m1",
+        id: 1,
+        options:{labelClass:'marker_labels',labelAnchor:'12 60',labelContent:'title'},
+    }];
 });
