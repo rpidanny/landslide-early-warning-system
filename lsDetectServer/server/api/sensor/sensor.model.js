@@ -19,10 +19,16 @@ var sensorSchema = mongoose.Schema({
     z_acceleration: {
         type: String
     },
-    location:{
+    location: {
         type: String
     },
-    created_date:{
+    humidity: {
+        type: String
+    },
+    sensor_id: {
+        type: String
+    },
+    created_date: {
         type: Number
     }
 });
