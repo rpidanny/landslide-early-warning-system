@@ -58,7 +58,7 @@ function Client(socket, userData, userList) {
 
 var serialport = require('serialport');
 var SerialPort = serialport.SerialPort;
-var port = new SerialPort('COM4', {
+var port = new SerialPort('/dev/ttyUSB0', {
     parser: serialport.parsers.readline('\n')
 });
 io.on('connection', function(socket) {
