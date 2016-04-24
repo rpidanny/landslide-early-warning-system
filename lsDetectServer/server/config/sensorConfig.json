@@ -1,0 +1,8 @@
+{
+	"location": 0,
+	"sensor_id": [0, 1],
+},
+{
+	"location": 1,
+	"sensor_id": [2, 3]
+}
