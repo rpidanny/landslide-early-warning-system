@@ -6,9 +6,13 @@ var userSchema = mongoose.Schema({
     },
     email: {
         type: String,
+        unique: true
     },
     phone: {
         type: Number
+    },
+    password:{
+        type: String
     },
     location: {
         type: String

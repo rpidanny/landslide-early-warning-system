@@ -36,6 +36,7 @@ exports.store = function(req, res) {
 };
 
 function storeSensorData(sensorObject, cb) {
+    console.log('create sensor data');
     Sensor.create(sensorObject, function(err, sensor) {
         if (err) {
             console.log(err);
@@ -44,6 +45,7 @@ function storeSensorData(sensorObject, cb) {
                 message: 'Error storing sensor data.'
             });
         } else {
+            console.log(sensor);
             return cb({
                 success: true,
                 message: 'Sensor Data stored successfully.'
@@ -116,6 +118,7 @@ function sendNotification(location) {
             console.log(err);
         }
         else{
+            console.log(userRes);
             if (userRes[0].push_notified == false) {   
                 updateUserPushFlag(location);
                 if(location == 0){
