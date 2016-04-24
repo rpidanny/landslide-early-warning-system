@@ -31,15 +31,14 @@ public class MainActivity extends AppCompatActivity {
     SensorEventListener mEventListener;
     private Button btnStart;
     private TextView txt1;
-    private String location = "Thapathali";
     private String SERVER_URL = "http://192.168.1.35:3000/sensor";
     private String TAG = "MainActivity";
     private Boolean sensorFlag = false;
-    private SeekBar sb;
+    private SeekBar sb,sb1,sb2;
 
     private float[] mValuesAccel       = new float[3];
     private float[] mValuesOrientation = new float[3];
-    private int humidity;
+    private int humidity,sensorID,location;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +52,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 humidity = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sb1 = (SeekBar) findViewById(R.id.seekBar2);
+        sb1.setProgress(1);
+        sb1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                location = progress;
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        sb2 = (SeekBar) findViewById(R.id.seekBar3);
+        sb2.setProgress(2);
+        sb2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                sensorID = progress;
             }
 
             @Override
@@ -94,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     case Sensor.TYPE_ACCELEROMETER:
                         System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
 
-                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location,humidity);
+                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location,humidity,sensorID);
                         PostTask myTask = new PostTask();
 
                         myTask.execute(s);
@@ -155,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
                 jsonObject.accumulate("yaw", sensor[0].getYaw());
                 jsonObject.accumulate("location", sensor[0].getLocation());
                 jsonObject.accumulate("humidity", sensor[0].getHumidity());
+                jsonObject.accumulate("sensor_id", sensor[0].getSensorID());
+
 
                 json = jsonObject.toString();
                 final String tempdata = json;
