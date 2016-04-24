@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     SensorEventListener mEventListener;
     private Button btnStart;
     private TextView txt1;
-    private String SERVER_URL = "http://192.168.1.35:3000/sensor";
+    private String SERVER_URL = "http://192.168.1.154:3000/sensor";
     private String TAG = "MainActivity";
     private Boolean sensorFlag = false;
     private SeekBar sb,sb1,sb2;
