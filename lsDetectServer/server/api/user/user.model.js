@@ -6,19 +6,12 @@ var userSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        unique: true 
-    },
-    password: {
-        type: String
     },
     phone: {
         type: String
     },
     location: {
         type: String
-    },
-    created_date:{
-        type: Number
     }
 });
 module.exports = mongoose.model('User', userSchema);
