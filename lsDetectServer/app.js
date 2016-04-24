@@ -11,7 +11,7 @@ require('./server/config/mongoose')(config);
 
 app.set('port', process.env.PORT || 3000);
 // var ip = "localhost";
-var ip = "192.168.1.54";
+var ip = "192.168.1.154";
 var server = http.createServer(app)
 server.listen(config.port, ip);
 
@@ -79,7 +79,7 @@ io.on('connection', function(socket) {
 
 
         var options = {
-            hostname: '192.168.1.54',
+            hostname: '192.168.1.154',
             port: 3000,
             path: '/sensor',
             method: 'POST',

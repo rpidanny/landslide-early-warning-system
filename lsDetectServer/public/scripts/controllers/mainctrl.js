@@ -46,7 +46,7 @@ app.controller('signupController', ['$scope', '$http',
     }
 ]);
 app.controller('dashboardController', function($scope) {
-    var socket = io.connect('http://192.168.1.54/');
+    var socket = io.connect('http://192.168.1.154/');
     socket.on('sensor data', function(data) {
         $scope.$apply(function() {
             $scope.currentSensor = data;
