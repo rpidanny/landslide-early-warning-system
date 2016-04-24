@@ -3,7 +3,9 @@ package challenge.app.warningreceiver;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,10 +30,34 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -52,14 +78,19 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    List<String> locationList = new ArrayList<>();
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    private UserRegisterTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mFullnameView;
+    private EditText mPhoneView;
+    private Spinner mLocationView;
     private View mProgressView;
     private View mLoginFormView;
 
@@ -76,18 +107,18 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptRegister();
                     return true;
                 }
                 return false;
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.sign_up_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mSignUpButton = (Button) findViewById(R.id.sign_up_button);
+        mSignUpButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegister();
             }
         });
 
@@ -98,8 +129,27 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
                 goToLoginActivity();
             }
         });
+
+        mLocationView = (Spinner) findViewById(R.id.location_list);
+        mLocationView.setAdapter(getLocationList());
+
+        mFullnameView = (EditText) findViewById(R.id.signup_fullname);
+        mPhoneView   = (EditText) findViewById(R.id.phone);
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private ArrayAdapter<String> getLocationList()
+    {
+        locationList.add("Thapathali");
+        locationList.add("Jawalakhel");
+        locationList.add("Gwarko");
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, locationList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        return adapter;
     }
 
     private void populateAutoComplete() {
@@ -156,7 +206,7 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptRegister() {
         if (mAuthTask != null) {
             return;
         }
@@ -167,7 +217,10 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
+        String phone = mPhoneView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String fullname = mFullnameView.getText().toString();
+        String location = (String)mLocationView.getSelectedItem();
 
         boolean cancel = false;
         View focusView = null;
@@ -190,16 +243,28 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             cancel = true;
         }
 
+        // Check for valid phone number
+        if (!TextUtils.isDigitsOnly(phone)){
+            mPhoneView.setError("Only Numbers are allowed");
+            cancel = true;
+        }
+
+        if(TextUtils.isEmpty(fullname)){
+            mFullnameView.setError("This field is required");
+            cancel = true;
+        }
+
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
+            // There was an error; don't attempt signup and focus the first
             // form field with an error.
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            User user = new User(fullname, email, password, phone, Integer.toString(locationList.indexOf(location)));
+            mAuthTask = new UserRegisterTask();
+            mAuthTask.execute(user);
         }
     }
 
@@ -303,37 +368,72 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
         int IS_PRIMARY = 1;
     }
 
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader( new InputStreamReader(inputStream));
+        String line = "";
+        String result = "";
+        while((line = bufferedReader.readLine()) != null)
+            result += line;
+
+        inputStream.close();
+        return result;
+
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
+    public class UserRegisterTask extends AsyncTask<User, Void, Boolean> {
+        private String requestURL = "http://192.168.1.35:3000/user";
+        private HashMap<String, String> postDataParams = new HashMap<>();
+        private String result = "";
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        protected Boolean doInBackground(User... user) {
+            InputStream inputStream = null;
+            String json = "";
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(requestURL);
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                JSONObject wrapper = new JSONObject();
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.accumulate("name", user[0].getFullname());
+                jsonObject.accumulate("email", user[0].getEmail());
+                jsonObject.accumulate("password", user[0].getPassword());
+                jsonObject.accumulate("phone", user[0].getPhone());
+                jsonObject.accumulate("location", user[0].getLocation());
+
+                wrapper.accumulate("user", jsonObject);
+                json = wrapper.toString();
+
+                StringEntity se = new StringEntity(json);
+                httpPost.setEntity(se);
+                httpPost.setHeader("Content-type", "application/json");
+                HttpResponse response = httpClient.execute(httpPost);
+
+                inputStream = response.getEntity().getContent();
+
+                if (inputStream != null){
+                    result = convertInputStreamToString(inputStream);
+                }
+                else {
+                    result = "Not Working!";
+                }
+            }
+            catch (ClientProtocolException e) {
+                e.printStackTrace();
                 return false;
             }
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+            catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            catch( Exception ex ){
+                ex.printStackTrace();
+                return false;
             }
 
             // TODO: register the new account here.
@@ -346,11 +446,32 @@ public class SignupActivity extends AppCompatActivity implements LoaderCallbacks
             showProgress(false);
 
             if (success) {
-                finish();
+                try {
+                    SharedPreferences sharedpreferences = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    //                editor.putString("id", )
+                    //                editor.putString("location", "Thapathali");
+                    //                editor.commit();
+                    JSONObject response = new JSONObject(result);
+
+                    editor.putString("location", response.getJSONObject("user_data").getString("location"));
+
+                    editor.commit();
+                    System.out.println(response.getJSONObject("user_data").getString("location"));
+                    gotoLogin();
+                }
+                catch(Exception ex ){
+                    ex.printStackTrace();
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+        }
+
+        private void gotoLogin(){
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         }
 
         @Override
