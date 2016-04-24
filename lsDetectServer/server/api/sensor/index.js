@@ -5,4 +5,9 @@ var router = express.Router();
 router.get('/', controller.index);
 router.post('/', controller.store);
 
-module.exports = router;
+
+module.exports = function (socket) {
+    var io = socket;
+    
+    return router;
+};

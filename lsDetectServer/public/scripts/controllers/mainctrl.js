@@ -46,6 +46,13 @@ app.controller('signupController', ['$scope', '$http',
     }
 ]);
 app.controller('dashboardController', function($scope) {
+    var socket = io.connect('http://192.168.1.56:3000/');
+    socket.on('sensor data', function(data) {
+        $scope.$apply(function() {
+            $scope.currentSensor = data;
+        });
+    console.log(data);
+    });
     $scope.map = {
         center: {
             latitude: 28.3949,
@@ -62,12 +69,20 @@ app.controller('dashboardController', function($scope) {
         longitude: 85.3240,
         title: "m0",
         id: 0,
-        options:{labelClass:'marker_labels',labelAnchor:'12 60',labelContent:'title'},
+        options: {
+            labelClass: 'marker_labels',
+            labelAnchor: '12 60',
+            labelContent: 'title'
+        },
     }, {
         latitude: 27.6644,
         longitude: 85.3188,
         title: "m1",
         id: 1,
-        options:{labelClass:'marker_labels',labelAnchor:'12 60',labelContent:'title'},
+        options: {
+            labelClass: 'marker_labels',
+            labelAnchor: '12 60',
+            labelContent: 'title'
+        },
     }];
 });
