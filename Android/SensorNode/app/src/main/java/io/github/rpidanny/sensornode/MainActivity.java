@@ -131,11 +131,10 @@ public class MainActivity extends AppCompatActivity {
                     case Sensor.TYPE_ACCELEROMETER:
                         System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
 
-                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[0],mValuesAccel[0],mValuesOrientation[0],mValuesOrientation[0],mValuesOrientation[0],location,humidity,sensorID);
+                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[1],mValuesAccel[2],mValuesOrientation[0],mValuesOrientation[1],mValuesOrientation[2],location,humidity,sensorID);
                         PostTask myTask = new PostTask();
-
                         myTask.execute(s);
-                        System.out.println(humidity);
+                        System.out.println(mValuesOrientation[1]);
                         break;
                     case Sensor.TYPE_ORIENTATION:
                         System.arraycopy(event.values, 0, mValuesOrientation, 0, 3);
