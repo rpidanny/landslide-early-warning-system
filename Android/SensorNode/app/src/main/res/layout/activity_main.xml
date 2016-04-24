@@ -51,7 +51,7 @@
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:max="2"
+        android:max="1"
         android:indeterminate="false" />
 
     <TextView
@@ -79,6 +79,6 @@
         android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:max="3"
+        android:max="2"
         android:indeterminate="false" />
 </RelativeLayout>
