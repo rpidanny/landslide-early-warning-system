@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -35,6 +37,17 @@ public class MainActivity extends AppCompatActivity {
         tv.setText(GCMPreferences.TOPICS[1]);
 
         register(GCMPreferences.SENDER_ID);
+
+        Button logOut = (Button)findViewById(R.id.main_log_out);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE).edit().clear().commit();
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     public void register(String senderID){

@@ -8,7 +8,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="challenge.app.warningreceiver.SignupActivity">
+    tools:context="challenge.app.warningreceiver.SignupActivity"
+    android:background="@drawable/nowpaper1crop">
 
     <!-- Login progress -->
     <ProgressBar
@@ -17,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <ScrollView
         android:id="@+id/login_form"
@@ -33,7 +34,9 @@
             <!-- Name -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/white"
+                >
 
                 <EditText
                     android:id="@+id/signup_fullname"
@@ -43,14 +46,16 @@
                     android:imeActionLabel="@string/signup_fullname"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/white"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <!--Email-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/white">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
@@ -59,14 +64,16 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/white" />
 
             </android.support.design.widget.TextInputLayout>
 
             <!--Password-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/white">
 
                 <EditText
                     android:id="@+id/password"
@@ -77,14 +84,16 @@
                     android:imeActionLabel="@string/action_sign_in_short"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/white" />
 
             </android.support.design.widget.TextInputLayout>
 
             <!--Phone-->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/white">
 
                 <EditText
                     android:id="@+id/phone"
@@ -96,7 +105,8 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="text"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textColor="@color/white" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -104,7 +114,9 @@
             <Spinner
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/location_list" />
+                android:id="@+id/location_list"
+
+                />
 
             <Button
                 android:id="@+id/sign_up_button"

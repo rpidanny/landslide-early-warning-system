@@ -3,7 +3,9 @@ package challenge.app.warningreceiver;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -65,6 +67,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        checkIfUserIsLoggedIn();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
@@ -101,6 +106,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+    }
+
+    private void checkIfUserIsLoggedIn(){
+        SharedPreferences prefs = getSharedPreferences(MainActivity.MyPREFERENCES, Context.MODE_PRIVATE);
+        if (prefs != null){
+            String loc = prefs.getString("location", null);
+            if (loc != null){
+                // location is already present
+                // goto main activity
+                Intent intent = new Intent( this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
     }
 
     private void goToSignupActivity() {
