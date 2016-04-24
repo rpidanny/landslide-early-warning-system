@@ -1,49 +1,44 @@
 <html>
-<head>
-	<meta charset="utf-8">
-    <base href="/">
-	<title>Flash Early Warning</title>
-
-	<!-- <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/> -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
-        <link rel="stylesheet" href="/assets/css/custom.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
-
-	<script src="/assets/js/angular.min.js"></script>
-	<script src="/assets/js/angular-resource.min.js"></script>
-	<script src="/assets/js/angular-route.min.js"></script>
-	<script src="/assets/js/ui-bootstrap.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-    
-<script src="http://rawgit.com/angular-ui/angular-google-maps/2.0.X/dist/angular-google-maps.js"></script>
-
-	
-	<script src="/scripts/controllers/mainctrl.js"></script>
-<style type="text/css">
-        html, body, #map_canvas {
-            height: 100%;
-            width: 100%;
-            margin: 0px;
-        }
-
-        #map_canvas {
-            position: relative;
-        }
-
-        .angular-google-map-container {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            right: 0;
-            left: 0;
-        }
-    </style>
-</head>
-<body ng-app="mainModule">
-	<div class="container">  
-            <div ng-include="'/views/header.html'"></div>
-		<ui-view></ui-view>
-	</div>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<base href="/">
+		<title>Flash Early Warning</title>
+		<!-- <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/> -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/custom.css"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+		<script src="/assets/js/angular.min.js"></script>
+		<script src="/assets/js/angular-resource.min.js"></script>
+		<script src="/assets/js/angular-route.min.js"></script>
+		<script src="/assets/js/ui-bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+		
+		<script src="http://rawgit.com/angular-ui/angular-google-maps/2.0.X/dist/angular-google-maps.js"></script>
+		<script src="/assets/js/socket.io.js"></script>
+		<script src="/scripts/controllers/mainctrl.js"></script>
+		<style type="text/css">
+		html, body, #map_canvas {
+		height: 100%;
+		width: 100%;
+		margin: 0px;
+		}
+		#map_canvas {
+		position: relative;
+		}
+		.angular-google-map-container {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		right: 0;
+		left: 0;
+		}
+		</style>
+	</head>
+	<body ng-app="mainModule">
+		<div class="container">
+			<div ng-include="'/views/header.html'"></div>
+			<ui-view></ui-view>
+		</div>
+	</body>
 </html>
