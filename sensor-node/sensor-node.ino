@@ -6,7 +6,7 @@
 
 Kalman kalmanX; 
 Kalman kalmanY;
-
+String humidity = "20";
 double accX, accY, accZ;
 double gyroX, gyroY, gyroZ;
 int16_t tempRaw;
@@ -140,9 +140,12 @@ void loop()
   if (gyroYangle < -180 || gyroYangle > 180)
     gyroYangle = kalAngleY;
 
+  if(Serial.available()){
+    humidity= Serial.readString();
+  }
   Serial.print(kalAngleY); Serial.print("\t");
   Serial.print("\r\n");
-  String final = "4,2,"+String(kalAngleY);
+  String final = "4,2,"+String(kalAngleY)+","+humidity;
   char bufferC[bufferSize];
   Serial.println(final);
   final.toCharArray(bufferC,bufferSize);
