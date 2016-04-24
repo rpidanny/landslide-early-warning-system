@@ -5,6 +5,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,6 +49,34 @@ public class MainActivity extends AppCompatActivity {
 
         sensorManager = (SensorManager) this.getSystemService(SENSOR_SERVICE);
 
+        /*
+        new android.os.Handler().postDelayed(
+            new Runnable() {
+                public void run() {
+
+                }
+            },
+        1500); */
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(sensorFlag) {
+                            System.out.println("Send POST");
+                            txt1.setText(Float.toString(mValuesOrientation[1]));
+                            LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[1],mValuesAccel[2],mValuesOrientation[0],mValuesOrientation[1],mValuesOrientation[2],location,humidity,sensorID);
+                            PostTask myTask = new PostTask();
+                            myTask.execute(s);
+                        }else{
+                            System.out.println("false");
+                        }
+                    }
+                });
+            }
+        }, 0, 1000);
         sb = (SeekBar) findViewById(R.id.seekBar);
         sb.setProgress(30);
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -64,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
         sb1 = (SeekBar) findViewById(R.id.seekBar2);
         sb1.setProgress(1);
@@ -108,13 +140,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!sensorFlag) {
-                    setListners(sensorManager, mEventListener);
                     btnStart.setText("Stop");
                     sensorFlag = true;
+                    System.out.print(sensorFlag);
                 }else {
-                    sensorManager.unregisterListener(mEventListener);
                     sensorFlag = false;
                     btnStart.setText("Start");
+                    System.out.print(sensorFlag);
                 }
             }
         });
@@ -130,11 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (event.sensor.getType()) {
                     case Sensor.TYPE_ACCELEROMETER:
                         System.arraycopy(event.values, 0, mValuesAccel, 0, 3);
-
-                        LandSlideSensor s = new LandSlideSensor(mValuesAccel[0],mValuesAccel[1],mValuesAccel[2],mValuesOrientation[0],mValuesOrientation[1],mValuesOrientation[2],location,humidity,sensorID);
-                        PostTask myTask = new PostTask();
-                        myTask.execute(s);
-                        System.out.println(mValuesOrientation[1]);
+                        //System.out.println(mValuesOrientation[1]);
                         break;
                     case Sensor.TYPE_ORIENTATION:
                         System.arraycopy(event.values, 0, mValuesOrientation, 0, 3);
@@ -145,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        //SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+        setListners(sensorManager, mEventListener);
 
     }
 

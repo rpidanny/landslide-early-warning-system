@@ -151,5 +151,5 @@ void loop()
   final.toCharArray(bufferC,bufferSize);
   radio.write(&bufferC, sizeof(bufferC));
 
-  delay(300);
+  delay(1000);
 }
